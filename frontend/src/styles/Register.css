@@ -1,0 +1,58 @@
+.registerPage_contaner{
+    text-align: center;
+    margin-top: 50px;
+}
+
+.registerPage_name{
+    color: #26457C;
+    font-weight: bold;
+    font-size: 2rem;
+}
+
+.register_form_container{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px auto;
+}
+
+
+.registerPage_create_btn{
+    background-color: #26457C;
+    color: #FFF;
+    border-radius: 50px;
+    width: 40%;
+    outline: none;
+    border: none;
+    padding: 10px 5px;
+}
+
+
+.registerPage_loginWith > img{
+    /* flex: 1; */
+    margin: 30px;
+    padding: 10px 5px;
+    cursor: pointer;
+    
+} 
+
+.registerPage_form_div{
+    width: 40%;
+}
+
+
+@media screen and (max-width: 480px) { 
+    .register_form_container{
+        width: 80%;
+        
+    }
+
+    .registerPage_create_btn{
+        width: 80%;
+    }
+
+    .registerPage_form_div{
+        width: 100%;
+    }
+}
