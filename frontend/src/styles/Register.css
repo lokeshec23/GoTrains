@@ -41,6 +41,11 @@
     width: 40%;
 }
 
+.registerPage_Link{
+    color: #26457C;
+    text-decoration:none;
+}
+
 
 @media screen and (max-width: 480px) { 
     .register_form_container{

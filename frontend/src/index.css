@@ -13,3 +13,12 @@
 }
 
 
+input:focus, 
+textarea:focus, 
+select:focus, 
+button:focus {
+  outline: none !important; /* Overrides any outline styles */
+  box-shadow: none !important; /* Ensures shadow is removed */
+  border: 1px solid #26457C !important; /* Optional: Keeps the border consistent */
+}
+
