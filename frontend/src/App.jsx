@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router";
+import { ToastContainer, toast } from "react-toastify";
 import "./App.css";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -15,6 +16,7 @@ const App = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/forget" element={<Forget />} />
       </Routes>
+      <ToastContainer />
     </BrowserRouter>
   );
 };

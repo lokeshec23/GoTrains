@@ -10,8 +10,10 @@ import EyeOpen from "../assets/images/Register/eye-open.svg";
 import { Link } from "react-router-dom";
 import "../styles/Register.css";
 import HelperText from "../utils/HelperText";
-// import X from "../assets/images/Register/X.svg";
-// import Apple from "../assets/images/Register/Apple.svg";
+import axios from "axios";
+import { registerUser } from "../services/registerSevice";
+import useApi from "../hooks/useApi";
+import { showToast } from "../utils/toast";
 
 const Register = () => {
   const [userInfo, setUserInfo] = useState({
@@ -25,6 +27,7 @@ const Register = () => {
     password: false,
     confirmPassword: false,
   });
+  const { loading, error: errorAPi, callApi } = useApi();
 
   const handleChange = (e) => {
     debugger;
@@ -41,8 +44,40 @@ const Register = () => {
   };
 
   const create_Account_function = async () => {
-    const isVerified = await check_form_validation();
-    if (!isVerified) return;
+    try {
+      const isVerified = await check_form_validation();
+      if (!isVerified) return;
+
+      // Prepare data for API
+      const formData = { ...userInfo };
+      delete formData.confirmPassword;
+
+      // Call the API
+      const response = await callApi(() => registerUser(formData));
+      if (response.status === 200) {
+        showToast(`Account created successfully!`, "success");
+        setUserInfo({
+          username: "",
+          email: "",
+          password: "",
+          confirmPassword: "",
+        });
+      } else {
+        showToast("Something went wrong", "error");
+        throw new Error(response.message || "Something went wrong");
+      }
+    } catch (err) {
+      // Handle API or validation errors
+      setError((prev) => ({
+        ...prev,
+        email: {
+          type: "error",
+          isError: true,
+          errorMessage: errorAPi,
+        },
+      }));
+      showToast(errorAPi, "error");
+    }
   };
 
   const check_form_validation = () => {
@@ -114,6 +149,7 @@ const Register = () => {
               aria-label="Username"
               aria-describedby="basic-addon1"
               name="username"
+              value={userInfo.username}
               onChange={(event) => {
                 handleChange(event);
               }}
@@ -144,6 +180,7 @@ const Register = () => {
               aria-label="Email"
               aria-describedby="basic-addon1"
               name="email"
+              value={userInfo.email}
               onChange={(event) => {
                 handleChange(event);
               }}
@@ -174,6 +211,7 @@ const Register = () => {
               aria-label="Password"
               aria-describedby="basic-addon1"
               name="password"
+              value={userInfo.password}
               onChange={(event) => {
                 handleChange(event);
               }}
@@ -212,6 +250,7 @@ const Register = () => {
               aria-label="Confirm Password"
               aria-describedby="basic-addon1"
               name="confirmPassword"
+              value={userInfo.confirmPassword}
               onChange={(event) => {
                 handleChange(event);
               }}
