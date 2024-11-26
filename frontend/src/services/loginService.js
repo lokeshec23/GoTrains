@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:5000/"; // Adjust to your backend URL
+const BASE_URL = `${import.meta.env.VITE_BASE_URL}`;
 
 // API call to log in a user
 export const loginUser = (userData) => {
