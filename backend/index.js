@@ -9,7 +9,7 @@ const cors = require("cors");
 dotenv.config();
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
-const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_SECRET = process.env.JWT_SECRET; // JWT from .env file
 
 app.use(bodyParser.json());
 
@@ -21,7 +21,9 @@ let db;
 MongoClient.connect(MONGO_URI)
   .then((client) => {
     db = client.db();
-    console.log("******************Connected to MongoDB**************************");
+    console.log(
+      "******************Connected to MongoDB**************************"
+    );
   })
   .catch((err) => console.error(err));
 
@@ -38,7 +40,9 @@ app.post("/register", async (req, res) => {
     // Check if user already exists
     const userExists = await db.collection("users").findOne({ email });
     if (userExists) {
-      return res.status(400).json({ status:400, message: "User already exists." });
+      return res
+        .status(400)
+        .json({ status: 400, message: "User already exists." });
     }
 
     // Hash password
@@ -48,7 +52,9 @@ app.post("/register", async (req, res) => {
     const newUser = { username, email, password: hashedPassword };
     await db.collection("users").insertOne(newUser);
 
-    res.status(201).json({status:200, message: "User registered successfully." });
+    res
+      .status(201)
+      .json({ status: 200, message: "User registered successfully." });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Internal server error." });
