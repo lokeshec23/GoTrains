@@ -21,7 +21,10 @@ const Home = () => {
       <div className="homePage_bottom_container">
         <p>
           Where is my <br />
-          <Link className="link">Train</Link>?
+          <Link className="link" to="/whereismytrain">
+            Train
+          </Link>
+          ?
         </p>
         <p>
           Already a user? <br />

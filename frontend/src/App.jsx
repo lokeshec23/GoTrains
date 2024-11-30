@@ -7,6 +7,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Forget from "./pages/Forget";
 import NotFoundPage from "./pages/NotFoundPage";
+import WhereIsMyTrain from "./pages/where_is_my_train/WhereISMyTrain";
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forget" element={<Forget />} />
+        <Route path="/whereismytrain" element={<WhereIsMyTrain />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
       <ToastContainer />
