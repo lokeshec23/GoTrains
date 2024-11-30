@@ -61,6 +61,47 @@ app.post("/register", async (req, res) => {
   }
 });
 
+// Login Route
+app.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+
+  // Basic validation
+  if (!email || !password) {
+    return res.status(400).json({ message: "Email and password are required." });
+  }
+
+  try {
+    // Check if user exists
+    const user = await db.collection("users").findOne({ email });
+    if (!user) {
+      return res.json({ message: "Invalid email or password.", status: 400 });
+    }
+
+    // Compare password
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.json({ message: "Invalid email or password.", status: 400 });
+    }
+
+    // Generate JWT token
+    const token = jwt.sign(
+      { userId: user._id, email: user.email }, // Payload
+      process.env.JWT_SECRET, // Secret key
+      { expiresIn: "1h" } // Token expiry
+    );
+
+    res.status(200).json({
+      status: 200,
+      message: "Login successful.",
+      token, // Return token to the client
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Internal server error." });
+  }
+});
+
+
 // Start Server
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT} :)`);

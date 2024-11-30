@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Forget from "./pages/Forget";
+import NotFoundPage from "./pages/NotFoundPage";
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forget" element={<Forget />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
       <ToastContainer />
     </BrowserRouter>

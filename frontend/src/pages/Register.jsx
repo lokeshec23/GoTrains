@@ -30,7 +30,6 @@ const Register = () => {
   const { loading, error: errorAPi, callApi } = useApi();
 
   const handleChange = (e) => {
-    debugger;
     const { name, value } = e.target;
     setError((prev) => ({
       ...prev,

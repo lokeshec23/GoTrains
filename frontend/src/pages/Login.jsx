@@ -7,13 +7,18 @@ import Fackbook from "../assets/images/Register/Fackbook_2.svg";
 import Google from "../assets/images/Register/Google.svg";
 import EyeClose from "../assets/images/Register/eye-close.svg";
 import EyeOpen from "../assets/images/Register/eye-open.svg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../styles/Register.css";
 import HelperText from "../utils/HelperText";
+import { loginUser } from "../services/loginService";
+import useApi from "../hooks/useApi";
+import { showToast } from "../utils/toast";
+
 // import X from "../assets/images/Register/X.svg";
 // import Apple from "../assets/images/Register/Apple.svg";
 
 const Login = () => {
+  const { loading, error: errorAPi, callApi } = useApi();
   const [userInfo, setUserInfo] = useState({
     // username: "",
     email: "",
@@ -26,8 +31,13 @@ const Login = () => {
     confirmPassword: false,
   });
 
+  const navigate = useNavigate();
+
+  const handleNavigation = () => {
+    navigate("/booking");
+  };
+
   const handleChange = (e) => {
-    debugger;
     const { name, value } = e.target;
     setError((prev) => ({
       ...prev,
@@ -41,8 +51,31 @@ const Login = () => {
   };
 
   const create_Account_function = async () => {
-    const isVerified = await check_form_validation();
-    if (!isVerified) return;
+    try {
+      // Step 1: Check form validation
+      const isVerified = await check_form_validation();
+      if (!isVerified) return;
+
+      // Step 2: Call API to log in the user
+      const response = await callApi(() => loginUser(userInfo));
+
+      // Step 3: Check response status
+      if (response?.status === 200) {
+        console.log("token", response.token);
+        showToast(`${response.message} Redirect to home page.`, "success");
+        localStorage.setItem("token", response.token); // Save token
+        setTimeout(() => {
+          handleNavigation();
+        }, 5000);
+      } else if (response.status === 400) {
+        const message = response?.message || "Bad Request. Login failed.";
+        showToast(message, "error");
+        console.log(message);
+      }
+    } catch (error) {
+      console.log("Network or unknown error", error);
+      showToast("An error occurred. Please try again later.", "error");
+    }
   };
 
   const check_form_validation = () => {
