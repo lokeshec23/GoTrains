@@ -10,7 +10,8 @@ dotenv.config();
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
 const JWT_SECRET = process.env.JWT_SECRET; // JWT from .env file
-
+const cheerio = require('cheerio');
+const axios = require('axios');
 app.use(bodyParser.json());
 
 // Allow requests from your frontend's origin
@@ -99,6 +100,34 @@ app.post("/login", async (req, res) => {
     console.error(err);
     res.status(500).json({ message: "Internal server error." });
   }
+});
+
+
+const getList = async () => {
+  try {
+    const { data } = await axios.get('https://en.wikipedia.org/wiki/List_of_railway_stations_in_India');
+    const $ = cheerio.load(data);
+
+    const stations = [];
+    $('table.wikitable tbody tr').each((index, element) => {
+      const name = $(element).find('td:nth-child(2)').text().trim();
+      const code = $(element).find('td:nth-child(3)').text().trim();
+
+      if (name && code) {
+        stations.push({ name, code });
+      }
+    });
+
+    return stations;
+  } catch (error) {
+    console.error('Error scraping station data:', error);
+    return [];
+  }
+};
+
+app.get('/getStationList', async (req, res) => {
+  const stations = await getList();
+  res.json(stations);
 });
 
 

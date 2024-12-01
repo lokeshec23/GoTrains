@@ -10,7 +10,6 @@ import EyeOpen from "../assets/images/Register/eye-open.svg";
 import { Link } from "react-router-dom";
 import "../styles/Register.css";
 import HelperText from "../utils/HelperText";
-import axios from "axios";
 import { registerUser } from "../services/registerSevice";
 import useApi from "../hooks/useApi";
 import { showToast } from "../utils/toast";
